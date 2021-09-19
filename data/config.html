@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <title>FileManager</title>
+    <meta charset="utf-8"/>
+    <link rel="stylesheet" type="text/css" href="/style.css">
+    <script src="fmw.js"></script>  
+    <script src="gzipper.js"></script>  
+    <script type="text/javascript" >
+    function postfom() {
+		var req = new XMLHttpRequest();
+		var url = "/config";
+		var formData = new FormData(document.getElementById("configform"));
+		req.open("POST", url, true);
+		req.onreadystatechange = function(){
+			if(req.readyState == 4){
+				if(req.status == 200){
+				document.getElementById("msg").innerHTML = req.responseText;
+				
+				}
+			}
+		}
+		req.send(formData);
+  	}
+    function getDevicename() {
+	  var xhttp = new XMLHttpRequest();
+          var devicename="";
+	  xhttp.onreadystatechange = function() {
+	    if (this.readyState == 4 && this.status == 200) {
+		devicename = this.responseText;
+				document.getElementById("o3").innerHTML = "Device: " +this.responseText;
+	    } else {
+	    console.log("unexpected response status " + this.status);
+	    }
+	  };
+	  xhttp.open("GET", "/devicename", false);
+	  xhttp.send();
+	}
+				function getDevicenamae() {
+					var req = new XMLHttpRequest();
+						req.open("GET", window.location.href+"/devicename", true);
+						req.onreadystatechange = function () {
+							if (req.readyState === 4) {
+								if (req.status === 200) {
+//								alert(req.responseText);	
+								} else {
+									console.log("unexpected response status " + req.status);
+								}
+							}
+						};
+					req.send(null);
+				}
+            			function load() {
+					/*getFile('https://raw.githubusercontent.com/miloit/smartfridge/master/config.json', function (allText) {
+		      			var configdata = JSON.parse(allText);
+		      			document.getElementById("devicename").value = configdata.devicename;
+		      			document.getElementById("mqtt_host").value = configdata.mqtt_host;
+		      			document.getElementById("mqtt_username").value = configdata.mqtt_username;
+		      			document.getElementById("mqtt_pass").value = configdata.mqtt_pass;
+		      			document.getElementById("mqtt_port").value = configdata.mqtt_port;
+		      			document.getElementById("mqtt_ssl").value = configdata.mqtt_ssl;
+		      			});*/
+		      			fetch("/config.json").then(r=>r.json()).then(d=>
+ Object.entries(d).map(([k,v])=>
+  document.getElementById(k).value=v)
+ )
+		      			}
+		      			
+		      			
+			</script>
+  </head>
+  <body class="background" onLoad="load();getDevicename()">
+    <div id="gc">
+        <div class="o1">&nbsp;</div>
+        <div class="o2">&nbsp;</div>
+        <div class="o3" id="o3">&nbsp;</div>
+        <div class="o4">&nbsp;</div>
+
+        <div class="m1">
+            <div class="s11">&nbsp;</div>
+            <div class="s12">
+            <div class="s13 background">&nbsp;</div>
+            </div>
+        </div>
+        <div class="m2">
+        <ul id="menu">              
+    <li><a href="/config">Configuration</a></li>
+    <li><a href="#"></a></li>
+    <li><a href="#"></a></li>
+    <li><a href="#"></a></li>
+</ul>
+        </div>
+        <div class="m3" ondrop="dropHandler(event);" ondragover="dragOverHandler(event);">
+          &nbsp;<br />
+          &nbsp;<br />
+          &nbsp;<br />
+        </div>
+        <div class="m4">
+            <div class="s41">&nbsp;</div>
+            <div class="s42">
+            <div class="s43 background">&nbsp;</div>
+            </div>
+        </div>
+
+        <div class="u1">&nbsp;</div>
+        <div class="u2" onclick="postfom()">Save config</div>
+        <div class="u3" id="msg"></div>
+        <div class="u4">&nbsp;</div>
+        <div class="c" id="fi">
+          <form method="post" id="configform" name="configform" action="javascript:void(0)" onsubmit="postfom()" enctype = "multipart/form-data">
+  <label for="devicename">Devicename:</label><br>
+  <input type="text" id="devicename" name="devicename" ><br>
+  <label for="mqtt_host">MQTT Host:</label><br>
+  <input type="text" id="mqtt_host" name="mqtt_host"><br>
+  <label for="mqtt_username">MQTT Username:</label><br>
+  <input type="text" id="mqtt_username" name="mqtt_username"><br>
+  <label for="mqtt_pass">MQTT Password:</label><br>
+  <input type="text" id="mqtt_pass" name="mqtt_pass"><br>
+  <label for="mqtt_port">MQTT Port:</label><br>
+  <input type="text" id="mqtt_port" name="mqtt_port"><br>
+  <label for="mqtt_ssl">MQTT Fingerprint:</label><br>
+  <input type="text" id="mqtt_ssl" name="mqtt_ssl"><br><br>
+<!--  <input type="submit" value="Submit">-->
+</form>
+        </div>
+    </div>
+  </body>
+</html>  
